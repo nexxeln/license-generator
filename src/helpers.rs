@@ -30,3 +30,28 @@ fn get_username() -> Option<String> {
 
     result
 }
+
+fn get_name() -> String {
+    let name: String = match get_username() {
+        Some(name) => {
+            let name: String = Input::with_theme(&ColorfulTheme::default())
+                .with_prompt("Enter your name")
+                .default(name)
+                .interact_text()
+                .unwrap();
+
+            name
+        }
+        None => {
+            let input: String = Input::with_theme(&ColorfulTheme::default())
+                .with_prompt("Your name")
+                .interact_text()
+                .unwrap();
+
+            input
+        }
+    };
+
+    name
+}
+
