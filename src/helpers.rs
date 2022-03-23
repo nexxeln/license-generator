@@ -1,5 +1,6 @@
 use std::{process::Command, io, fs};
 use dialoguer::{console::Style, theme::ColorfulTheme, Input, Select};
+use license::LicenseContent;
 use crate::license;
 
 pub fn select(selections: &Vec<String>) -> String {
@@ -11,6 +12,36 @@ pub fn select(selections: &Vec<String>) -> String {
         .unwrap();
 
     selections[selection].clone()
+}
+
+pub fn fill_license(license: &LicenseContent) {
+    let name = get_name();
+    let year = get_current_year();
+
+    let content = license
+        .body
+        .replace("[year]", &year)
+        .replace("[fullname]", &name)
+        .replace("<year>", &year)
+        .replace("<name of author>", &name);
+
+    match write_file("LICENSE", &content) {
+        Ok(_) => println!(
+            "{}",
+            Style::new()
+                .for_stderr()
+                .green()
+                .apply_to("✓ License created successfully")
+        ),
+        Err(err) => println!(
+            "{} {}",
+            Style::new()
+                .for_stderr()
+                .red()
+                .apply_to("✘ an error occured"),
+            err
+        ),
+    };
 }
 
 fn get_current_year() -> String {
