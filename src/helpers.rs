@@ -1,4 +1,4 @@
-use std::{process::Command, fs};
+use std::{process::Command, io, fs};
 use dialoguer::{console::Style, theme::ColorfulTheme, Input, Select};
 use crate::license;
 
@@ -65,3 +65,19 @@ fn get_name() -> String {
     name
 }
 
+fn write_file(path: &str, content: &str) -> Result<(), io::Error> {
+    let result = match !fs::metadata(path).is_ok() {
+        false => {
+            let path: String = Input::with_theme(&ColorfulTheme::default())
+                .with_prompt("LICENSE already exists, enter a new name or the content will be overriden!")
+                .default(path.to_string())
+                .interact_text()
+                .unwrap();
+
+            fs::write(path, content)
+        }
+        true => fs::write(path, content),
+    };
+
+    result
+}
