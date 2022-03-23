@@ -21,8 +21,8 @@ pub fn fill_license(license: &LicenseContent) {
     let content = license
         .body
         .replace("[year]", &year)
-        .replace("[fullname]", &name)
         .replace("<year>", &year)
+        .replace("[fullname]", &name)
         .replace("<name of author>", &name);
 
     match write_file("LICENSE", &content) {
