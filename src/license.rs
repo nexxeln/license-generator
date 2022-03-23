@@ -1,4 +1,5 @@
 use serde::Deserialize;
+use ureq::serde_json::Value::String;
 
 #[derive(Debug, Deserialize)]
 pub struct License {
@@ -14,7 +15,7 @@ pub struct Licenses {
     pub license: Vec<License>
 }
 
-impl License {
+impl Licenses {
     pub fn fetch() -> Licenses {
         let response: Vec<License> = match ureq::get("https://api.github.com/licenses").call() {
             Ok(res) => res.into_json().unwrap(),
@@ -22,5 +23,9 @@ impl License {
         };
 
         Licenses {license: response}
+    }
+
+    pub fn get_license_names(&self) -> Vec<String> {
+        self.license.iter().map(|l| String::from(&l.name)).collect()
     }
 }
