@@ -13,6 +13,16 @@ pub fn select(selections: &Vec<String>) -> String {
     selections[selection].clone()
 }
 
+fn get_current_year() -> String {
+    let year: String = Input::with_theme(&ColorfulTheme::default())
+        .with_prompt("Enter the year")
+        .default("2022".to_string())
+        .interact_text()
+        .unwrap();
+
+    year
+}
+
 // try to get username from git config
 fn get_username() -> Option<String> {
     let cmd = Command::new("git")
