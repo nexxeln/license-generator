@@ -1,6 +1,6 @@
 <h1 align="center">License Generator</h1>
 
-![demo](https://us-east-1.tixte.net/uploads/nexxel.needs.rest/idea64_scc8KMWIVn.gif)
+![demo](https://us-east-1.tixte.net/uploads/nexxel.needs.rest/idea64_rZlJLu450P.gif)
 
 ### Overview
 
@@ -10,34 +10,27 @@ I know that GitHub has a great GUI to add licenses to projects but I always foun
 
 I had not written some Rust code in a while so I made this simple project to brush up my Rust skills a bit (still very beginner).
 
-
-### Prerequisites
-
-- A Rust development environment
-- I may release pre-compiled binaries in the future
-
 ### Installation
 
-- Clone the repository
-  ```bash
-  git clone https://github.com/nexxeln/license-generator.git
-  ```
-- Install the executable
-  ```bash
-  cd license-generator
-  cargo install --path .
-  ```
+#### Using Cargo
+
+```bash
+cargo install gen-license
+```
+
+#### From source
+
+```bash
+git clone https://github.com/nexxeln/license-generator.git
+cd license-generator
+cargo install --path .
+```
 
 ### Usage
 
-- For Windows
-   ```shell
-   license_generator.exe
-   ```
-- For Linux and macOS
-  ```bash
-  license_generator
-  ```
+```bash
+gen-license
+```
 
 ### Contributing
 - Fork the repository
