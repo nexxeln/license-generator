@@ -1,5 +1,5 @@
 [package]
-name = "license_generator"
+name = "gen-license"
 version = "0.1.0"
 edition = "2021"
 repository = "https://github.com/nexxeln/license-generator/"
