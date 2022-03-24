@@ -26,6 +26,8 @@ cd license-generator
 cargo install --path .
 ```
 
+If you don't have cargo installed, you can download the executable from the [releases](https://github.com/nexxeln/license-generator/releases) section.
+
 ### Usage
 
 ```bash
