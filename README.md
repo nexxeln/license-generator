@@ -1,7 +1,7 @@
 <h1 align="center">License Generator</h1>
 
- add gif here later
- 
+![demo](https://us-east-1.tixte.net/uploads/nexxel.needs.rest/idea64_scc8KMWIVn.gif)
+
 ### Overview
 
 This is a blazing fast ⚡, command line license generator for your open source projects written in Rust.
