@@ -1,6 +1,6 @@
 use serde::Deserialize;
-use ureq::serde_json::Value::String;
 
+// all structs are from https://api.github.com/licenses
 #[derive(Debug, Deserialize)]
 pub struct License {
     pub key: String,
@@ -22,29 +22,31 @@ pub struct LicenseContent {
 }
 
 impl LicenseContent {
-    pub fn about(url: &String) -> LicenseContent {
-        let license_content: LicenseContent = match ureq::get(&url).call() {
+    // fetch license content
+    pub fn fetch_license_content(url: &String) -> LicenseContent {
+        let license: LicenseContent = match ureq::get(&url).call() {
             Ok(res) => res.into_json().unwrap(),
-            Err(error) => panic!("Unable to fetch license content: {}", error)
+            Err(error) => panic!("Unable to fetch license content: {}", error),
         };
 
-        license_content
+        license
     }
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Licenses {
-    pub license: Vec<License>
+    pub license: Vec<License>,
 }
 
 impl Licenses {
-    pub fn fetch() -> Licenses {
-        let response: Vec<License> = match ureq::get("https://api.github.com/licenses").call() {
+    // fetch all licenses from github
+    pub fn fetch_licenses() -> Licenses {
+        let body: Vec<License> = match ureq::get("https://api.github.com/licenses").call() {
             Ok(res) => res.into_json().unwrap(),
-            Err(error) => panic!("Unable to get licenses: {}", error)
+            Err(error) => panic!("Unable to fetch licenses: {}", error),
         };
 
-        Licenses {license: response}
+        Licenses { license: body }
     }
 
     pub fn get_license_names(&self) -> Vec<String> {
@@ -52,15 +54,15 @@ impl Licenses {
     }
 
     pub fn get_license_from_name(&self, name: &String) -> LicenseContent {
-        let lisc = &self.license;
+        let lic = &self.license;
 
-        let result = lisc
+        let result = lic
             .into_iter()
             .filter(|l| l.name == name.clone())
             .map(|l| l.url.clone())
             .collect();
 
-        LicenseContent::about(&result)
+        LicenseContent::fetch_license_content(&result)
     }
 }
 
