@@ -2,6 +2,8 @@
 
 ![demo](https://us-east-1.tixte.net/uploads/nexxel.needs.rest/idea64_rZlJLu450P.gif)
 
+<p align="center"><img src="https://img.shields.io/crates/dv/gen-license?color=%230000f6&label=downloads" /></p>
+
 ### Overview
 
 This is a blazing fast ⚡, command line license generator for your open source projects written in Rust.
