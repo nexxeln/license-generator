@@ -2,7 +2,7 @@
 
 ![demo](https://us-east-1.tixte.net/uploads/nexxel.needs.rest/idea64_rZlJLu450P.gif)
 
-<p align="center"><img src="https://img.shields.io/crates/dv/gen-license?color=%230000f6&label=downloads" /></p>
+<p align="center"><img src="https://img.shields.io/crates/d/gen-license?color=%23b7410e" /></p>
 
 ### Overview
 
