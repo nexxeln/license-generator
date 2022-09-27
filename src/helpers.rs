@@ -1,7 +1,7 @@
-use std::{process::Command, fs, io};
+use crate::license;
 use dialoguer::{console::Style, theme::ColorfulTheme, Input, Select};
 use license::LicenseContent;
-use crate::license;
+use std::{fs, io, process::Command};
 
 // main logic to fill the license with name and year
 pub fn fill_content(license: &LicenseContent) {
@@ -72,7 +72,6 @@ fn get_git_username() -> Option<String> {
 fn get_name() -> String {
     let name: String = match get_git_username() {
         Some(mut name) => {
-
             // removing trailing newline (cross platform way)
             if name.ends_with("\n") {
                 name.pop();
@@ -119,7 +118,9 @@ fn write_file(path: &str, content: &str) -> Result<(), io::Error> {
     let result = match !fs::metadata(path).is_ok() {
         false => {
             let path: String = Input::with_theme(&ColorfulTheme::default())
-                .with_prompt("LICENSE already exists, enter a new name else the content will be overridden!")
+                .with_prompt(
+                    "LICENSE already exists, enter a new name else the content will be overridden!",
+                )
                 .default(path.to_string())
                 .interact_text()
                 .unwrap();

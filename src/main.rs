@@ -1,5 +1,5 @@
-mod license;
 mod helpers;
+mod license;
 
 fn main() {
     // fetch licenses
