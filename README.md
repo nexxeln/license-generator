@@ -20,6 +20,12 @@ I had not written some Rust code in a while so I made this simple project to bru
 cargo install gen-license
 ```
 
+#### Using AUR (Arch/Arch-based Linux Distros)
+
+```
+yay -S gen-license
+```
+
 #### From source
 
 ```bash
