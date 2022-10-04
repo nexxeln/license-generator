@@ -65,4 +65,3 @@ impl Licenses {
         LicenseContent::fetch_license_content(&result)
     }
 }
-
