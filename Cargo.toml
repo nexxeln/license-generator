@@ -9,6 +9,6 @@ license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dialoguer = "0.10.0"
+dialoguer = {version = "0.10.0", features = ["fuzzy-select"]}
 serde = {version = "1.0", features = ["derive"]}
 ureq = {version = "2.4.0", features = ["json"]}
