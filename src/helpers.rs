@@ -1,5 +1,5 @@
 use crate::license;
-use dialoguer::{console::Style, theme::ColorfulTheme, Input, Select};
+use dialoguer::{console::Style, theme::ColorfulTheme, Input, FuzzySelect};
 use license::LicenseContent;
 use std::{fs, io, process::Command};
 
@@ -40,7 +40,7 @@ pub fn fill_content(license: &LicenseContent) {
 
 // select license
 pub fn select(selections: &Vec<String>) -> String {
-    let selection = Select::with_theme(&ColorfulTheme::default())
+    let selection = FuzzySelect::with_theme(&ColorfulTheme::default())
         .with_prompt("Choose a license")
         .default(0)
         .items(&selections[..])
