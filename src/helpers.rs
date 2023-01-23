@@ -2,11 +2,12 @@ use crate::license;
 use dialoguer::{console::Style, theme::ColorfulTheme, Input, FuzzySelect};
 use license::LicenseContent;
 use std::{fs, io, process::Command};
+use chrono::{Datelike, Utc};
 
 // main logic to fill the license with name and year
 pub fn fill_content(license: &LicenseContent) {
     let name = get_name();
-    let year = get_current_year();
+    let year = get_year();
 
     // replacing content
     let body = license
@@ -103,10 +104,12 @@ fn get_name() -> String {
 }
 
 // get year from user
-fn get_current_year() -> String {
+fn get_year() -> String {
+    let current_year = Utc::now().year();
+
     let year: String = Input::with_theme(&ColorfulTheme::default())
         .with_prompt("Enter year")
-        .default("2022".to_string())
+        .default(current_year.to_string())
         .interact_text()
         .unwrap();
 
