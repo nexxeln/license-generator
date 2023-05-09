@@ -59,7 +59,7 @@ fn get_git_username() -> Option<String> {
         .arg("--get")
         .arg("user.name")
         .output()
-        .expect("fail");
+        .ok()?;
 
     let res: Option<String> = match cmd.status.success() {
         true => Option::from(String::from_utf8_lossy(&cmd.stdout).to_string()),
