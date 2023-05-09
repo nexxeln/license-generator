@@ -33,7 +33,7 @@ pub fn fill_content(license: &LicenseContent) {
             Style::new()
                 .for_stderr()
                 .red()
-                .apply_to("✘ An error occured"),
+                .apply_to("✘ An error occurred"),
             error
         ),
     };
