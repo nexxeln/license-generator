@@ -92,7 +92,7 @@ fn get_name() -> String {
         }
         None => {
             let input: String = Input::with_theme(&ColorfulTheme::default())
-                .with_prompt("Name")
+                .with_prompt("Enter your name")
                 .interact_text()
                 .unwrap();
 
