@@ -26,12 +26,10 @@ pub struct LicenseContent {
 impl LicenseContent {
     // fetch license content
     pub fn fetch(url: &String) -> LicenseContent {
-        let license: LicenseContent = match ureq::get(&url).call() {
+        match ureq::get(&url).call() {
             Ok(res) => res.into_json().unwrap(),
             Err(error) => panic!("Unable to fetch license content: {}", error),
-        };
-
-        license
+        }
     }
 }
 
