@@ -10,6 +10,8 @@ pub struct License {
     pub node_id: String,
 }
 
+type Licenses = Vec<License>;
+
 #[derive(Debug, Deserialize)]
 pub struct LicenseContent {
     pub key: String,
@@ -23,45 +25,34 @@ pub struct LicenseContent {
 
 impl LicenseContent {
     // fetch license content
-    pub fn fetch_license_content(url: &String) -> LicenseContent {
-        let license: LicenseContent = match ureq::get(&url).call() {
+    pub fn fetch(url: &String) -> LicenseContent {
+        match ureq::get(&url).call() {
             Ok(res) => res.into_json().unwrap(),
             Err(error) => panic!("Unable to fetch license content: {}", error),
-        };
-
-        license
+        }
     }
 }
 
-#[derive(Debug, Deserialize)]
-pub struct Licenses {
-    pub license: Vec<License>,
+impl From<&String> for LicenseContent {
+    fn from (url: &String) -> LicenseContent {
+        LicenseContent::fetch(&url)
+    }
+
 }
 
-impl Licenses {
+impl From<&License> for LicenseContent {
+    fn from (license: &License) -> LicenseContent {
+        LicenseContent::fetch(&license.url)
+    }
+
+}
+
+impl License {
     // fetch all licenses from github
-    pub fn fetch_licenses() -> Licenses {
-        let body: Vec<License> = match ureq::get("https://api.github.com/licenses").call() {
+    pub fn fetch() -> Licenses {
+        match ureq::get("https://api.github.com/licenses").call() {
             Ok(res) => res.into_json().unwrap(),
             Err(error) => panic!("Unable to fetch licenses: {}", error),
-        };
-
-        Licenses { license: body }
-    }
-
-    pub fn get_license_names(&self) -> Vec<String> {
-        self.license.iter().map(|l| String::from(&l.name)).collect()
-    }
-
-    pub fn get_license_from_name(&self, name: &String) -> LicenseContent {
-        let lic = &self.license;
-
-        let result = lic
-            .into_iter()
-            .filter(|l| l.name == name.clone())
-            .map(|l| l.url.clone())
-            .collect();
-
-        LicenseContent::fetch_license_content(&result)
+        }
     }
 }
