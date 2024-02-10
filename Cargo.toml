@@ -1,6 +1,6 @@
 [package]
 name = "gen-license"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 repository = "https://github.com/nexxeln/license-generator/"
 description = "A very easy-to-use and fast command line license generator!"
