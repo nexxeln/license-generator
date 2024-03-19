@@ -2,14 +2,14 @@
 name = "gen-license"
 version = "0.1.4"
 edition = "2021"
-repository = "https://github.com/nexxeln/license-generator/"
+repository = "https://github.com/rithulkamesh/gen-license"
+authors=["Rithul Kamesh <hi@rithul.dev>", "Shoubhit Dash <shoubhit2005@gmail.com>"]
 description = "A very easy-to-use and fast command line license generator!"
 license = "MIT"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 chrono = "0.4.23"
-dialoguer = {version = "0.10.0", features = ["fuzzy-select"]}
-serde = {version = "1.0", features = ["derive"]}
-ureq = {version = "2.4.0", features = ["json"]}
+ureq = { version = "2.4.0", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+clap = { version = "4.5.3", features = ["derive"] }
+dialoguer = { version = "0.10.0", features = ["fuzzy-select"] }
