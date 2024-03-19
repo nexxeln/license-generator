@@ -1,6 +1,6 @@
 [package]
 name = "gen-license"
-version = "0.1.4"
+version = "0.2.0"
 edition = "2021"
 repository = "https://github.com/rithulkamesh/gen-license"
 authors=["Rithul Kamesh <hi@rithul.dev>", "Shoubhit Dash <shoubhit2005@gmail.com>"]

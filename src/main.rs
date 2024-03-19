@@ -8,10 +8,10 @@ use license::LicenseContent;
 #[command(version, about, long_about = None)]
 struct Args {
     #[arg(short, long)]
-    license_name: String,
+    license_name: Option<String>,
 
     #[arg(short, long)]
-    skip_prompt: bool,
+    skip_prompt: Option<bool>,
 }
 
 fn main() {
@@ -19,7 +19,7 @@ fn main() {
     let valid_license_names = &licenses.get_license_keys();
 
     let args: Args = Args::parse();
-    let license_name = &args.license_name.to_lowercase();
+    let license_name = &args.license_name.unwrap_or(String::from("")).to_lowercase();
     let license_content: LicenseContent;
 
     if valid_license_names.contains(&license_name) {
@@ -29,5 +29,5 @@ fn main() {
         license_content = licenses.get_license_from_name(&license);
     }
 
-    helpers::fill_content(&license_content, args.skip_prompt);
+    helpers::fill_content(&license_content, args.skip_prompt.unwrap_or(false));
 }
