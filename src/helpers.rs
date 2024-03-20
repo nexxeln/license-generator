@@ -1,13 +1,13 @@
 use crate::license;
-use dialoguer::{console::Style, theme::ColorfulTheme, Input, FuzzySelect};
+use chrono::{Datelike, Local};
+use dialoguer::{console::Style, theme::ColorfulTheme, FuzzySelect, Input};
 use license::LicenseContent;
 use std::{fs, io, process::Command};
-use chrono::{Datelike, Local};
 
 // main logic to fill the license with name and year
-pub fn fill_content(license: &LicenseContent) {
-    let name = get_name();
-    let year = get_year();
+pub fn fill_content(license: &LicenseContent, skip_prompt: bool) {
+    let name = get_name(skip_prompt);
+    let year = get_year(skip_prompt);
 
     // replacing content
     let body = license
@@ -70,7 +70,7 @@ fn get_git_username() -> Option<String> {
 }
 
 // get name from user
-fn get_name() -> String {
+fn get_name(skip_prompt: bool) -> String {
     let name: String = match get_git_username() {
         Some(mut name) => {
             // removing trailing newline (cross platform way)
@@ -82,11 +82,13 @@ fn get_name() -> String {
                 }
             }
 
-            let name: String = Input::with_theme(&ColorfulTheme::default())
-                .with_prompt("Enter your name")
-                .default(name)
-                .interact_text()
-                .unwrap();
+            if !skip_prompt {
+                return Input::with_theme(&ColorfulTheme::default())
+                    .with_prompt("Enter your name")
+                    .default(name.clone())
+                    .interact_text()
+                    .unwrap();
+            }
 
             name
         }
@@ -104,16 +106,18 @@ fn get_name() -> String {
 }
 
 // get year from user
-fn get_year() -> String {
+fn get_year(skip_prompt: bool) -> String {
     let current_year = Local::now().year();
 
-    let year: String = Input::with_theme(&ColorfulTheme::default())
+    if skip_prompt {
+        return current_year.to_string();
+    }
+
+    Input::with_theme(&ColorfulTheme::default())
         .with_prompt("Enter year")
         .default(current_year.to_string())
         .interact_text()
-        .unwrap();
-
-    year
+        .unwrap()
 }
 
 // write license file

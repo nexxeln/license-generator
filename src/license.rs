@@ -53,12 +53,28 @@ impl Licenses {
         self.license.iter().map(|l| String::from(&l.name)).collect()
     }
 
+    pub fn get_license_keys(&self) -> Vec<String> {
+        self.license.iter().map(|l| String::from(&l.key)).collect()
+    }
+
     pub fn get_license_from_name(&self, name: &String) -> LicenseContent {
         let lic = &self.license;
 
         let result = lic
             .into_iter()
             .filter(|l| l.name == name.clone())
+            .map(|l| l.url.clone())
+            .collect();
+
+        LicenseContent::fetch_license_content(&result)
+    }
+
+    pub fn get_license_from_key(&self, key: &String) -> LicenseContent {
+        let lic = &self.license;
+
+        let result = lic
+            .into_iter()
+            .filter(|l| l.key == key.clone())
             .map(|l| l.url.clone())
             .collect();
 
