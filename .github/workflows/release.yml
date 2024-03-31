@@ -1,0 +1,86 @@
+name: Release CLI
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  publish_cli:
+    name: Publishing CLI for ${{ matrix.job.target }}
+    runs-on: ${{ matrix.job.os }}
+    strategy:
+      matrix:
+        job:
+          - os: macos-latest
+            target: x86_64-apple-darwin
+            use-cross: false
+          - os: macos-latest
+            target: aarch64-apple-darwin
+            use-cross: false
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            use-cross: false
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            use-cross: false
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            use-cross: true
+          - os: ubuntu-latest
+            target: i686-unknown-linux-gnu
+            use-cross: true
+          - os: ubuntu-latest
+            target: arm-unknown-linux-gnueabihf
+            use-cross: true
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+            use-cross: true
+    steps:
+      - name: Installing Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.77.1
+          targets: ${{ matrix.job.target }}
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install cross
+        if: matrix.job.use-cross
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cross
+
+      - name: Cargo build
+        env:
+          MACOSX_DEPLOYMENT_TARGET: 10.7
+        shell: bash
+        run: |
+          if [[ "${{ matrix.job.use-cross }}" == "true" ]]; then
+            cross build --release --target ${{ matrix.job.target }}
+          else
+            cargo build --release --target ${{ matrix.job.target }}
+          fi
+
+      - name: Create bundle name
+        id: bundle_name
+        shell: bash
+        run: |
+          bundle_name="gen-license-${GITHUB_REF/refs\/tags\//}-${{ matrix.job.target }}"
+          echo "value=$bundle_name" >> $GITHUB_OUTPUT
+
+      - name: Prepare binaries
+        shell: bash
+        run: |
+          cd target/${{ matrix.job.target }}/release
+          strip gen-license || true
+          tar czvf ../../../${{ steps.bundle_name.outputs.value }}.tar.gz gen-license
+
+      - name: Releasing assets
+        id: upload_asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ steps.bundle_name.outputs.value }}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
