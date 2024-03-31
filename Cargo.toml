@@ -8,8 +8,14 @@ description = "A very easy-to-use and fast command line license generator!"
 license = "MIT"
 
 [dependencies]
-chrono = "0.4.23"
 ureq = { version = "2.4.0", features = ["json"] }
 serde = { version = "1.0", features = ["derive"] }
 clap = { version = "4.5.3", features = ["derive"] }
 dialoguer = { version = "0.10.0", features = ["fuzzy-select"] }
+time = "0.3.34"
+
+[profile.release]
+strip = true
+opt-level = "z"
+lto = true
+codegen-units = 1

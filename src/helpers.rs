@@ -1,8 +1,8 @@
 use crate::license;
-use chrono::{Datelike, Local};
 use dialoguer::{console::Style, theme::ColorfulTheme, FuzzySelect, Input};
 use license::LicenseContent;
 use std::{fs, io, process::Command};
+use time::OffsetDateTime;
 
 // main logic to fill the license with name and year
 pub fn fill_content(license: &LicenseContent, skip_prompt: bool) {
@@ -40,11 +40,11 @@ pub fn fill_content(license: &LicenseContent, skip_prompt: bool) {
 }
 
 // select license
-pub fn select(selections: &Vec<String>) -> String {
+pub fn select(selections: &[String]) -> String {
     let selection = FuzzySelect::with_theme(&ColorfulTheme::default())
         .with_prompt("Choose a license")
         .default(0)
-        .items(&selections[..])
+        .items(selections)
         .interact()
         .unwrap();
 
@@ -61,23 +61,21 @@ fn get_git_username() -> Option<String> {
         .output()
         .ok()?;
 
-    let res: Option<String> = match cmd.status.success() {
-        true => Option::from(String::from_utf8_lossy(&cmd.stdout).to_string()),
-        false => Option::from(None),
-    };
-
-    res
+    match cmd.status.success() {
+        true => Some(String::from_utf8_lossy(&cmd.stdout).to_string()),
+        false => None,
+    }
 }
 
 // get name from user
 fn get_name(skip_prompt: bool) -> String {
-    let name: String = match get_git_username() {
+    match get_git_username() {
         Some(mut name) => {
             // removing trailing newline (cross platform way)
-            if name.ends_with("\n") {
+            if name.ends_with('\n') {
                 name.pop();
 
-                if name.ends_with("\r") {
+                if name.ends_with('\r') {
                     name.pop();
                 }
             }
@@ -92,22 +90,16 @@ fn get_name(skip_prompt: bool) -> String {
 
             name
         }
-        None => {
-            let input: String = Input::with_theme(&ColorfulTheme::default())
-                .with_prompt("Name")
-                .interact_text()
-                .unwrap();
-
-            input
-        }
-    };
-
-    name
+        None => Input::with_theme(&ColorfulTheme::default())
+            .with_prompt("Name")
+            .interact_text()
+            .unwrap(),
+    }
 }
 
 // get year from user
 fn get_year(skip_prompt: bool) -> String {
-    let current_year = Local::now().year();
+    let current_year = OffsetDateTime::now_utc().year().to_string();
 
     if skip_prompt {
         return current_year.to_string();
@@ -122,8 +114,8 @@ fn get_year(skip_prompt: bool) -> String {
 
 // write license file
 fn write_file(path: &str, content: &str) -> Result<(), io::Error> {
-    let result = match !fs::metadata(path).is_ok() {
-        false => {
+    match fs::metadata(path) {
+        Ok(_) => {
             let path: String = Input::with_theme(&ColorfulTheme::default())
                 .with_prompt(
                     "LICENSE already exists, enter a new name else the content will be overridden!",
@@ -134,8 +126,6 @@ fn write_file(path: &str, content: &str) -> Result<(), io::Error> {
 
             fs::write(path, content)
         }
-        true => fs::write(path, content),
-    };
-
-    result
+        Err(_) => fs::write(path, content),
+    }
 }

@@ -2,7 +2,10 @@
 
 ![demo](https://us-east-1.tixte.net/uploads/nexxel.needs.rest/idea64_rZlJLu450P.gif)
 
-<p align="center"><img src="https://img.shields.io/crates/d/gen-license?color=%23b7410e" /></p>
+<p align="center">
+  <img src="https://img.shields.io/crates/d/gen-license?color=%23b7410e" />
+  <img src="https://img.shields.io/crates/v/gen-license" />
+</p>
 
 ### Overview
 
@@ -13,6 +16,16 @@ I know that GitHub has a great GUI to add licenses to projects but I always foun
 I had not written some Rust code in a while so I made this simple project to brush up my Rust skills a bit (still very beginner).
 
 ### Installation
+
+#### Prebuilt binaries
+
+Prebuilt binaries are available on the [release](https://github.com/nexxeln/license-generator/releases/latest) page.
+
+```bash
+wget https://github.com/nexxeln/license-generator/releases/download/v0.3.0/gen-license-v0.3.0-x86_64-unknown-linux-musl.tar.gz
+tar -xvf gen-license-v0.3.0-x86_64-unknown-linux-musl.tar.gz
+mv gen-license ~/.local/bin
+```
 
 #### Using Cargo
 
@@ -34,15 +47,8 @@ cd license-generator
 cargo install --path .
 ```
 
-If you don't have cargo installed, you can download the executable from the [releases](https://github.com/nexxeln/license-generator/releases) section.
-
-### Usage
-
-```bash
-gen-license
-```
-
 ### Contributing
+
 - Fork the repository
 - Create a branch
   ```bash
@@ -54,3 +60,17 @@ gen-license
   git push origin fix/amazingFix
   ```
 - Open a pull request
+
+#### Creating a release
+
+- Extensively test your changes and get them on `main`
+- In a commit with only one change, update the version in `Cargo.toml`
+- Tag the commit with the version number
+  ```bash
+  git tag -a v0.3.0 -m "v0.3.0"
+  ```
+- Push the tag
+  ```bash
+  git push --tags origin main
+  ```
+- Observe progress on the [Actions tab](https://github.com/nexxeln/license-generator/actions)
